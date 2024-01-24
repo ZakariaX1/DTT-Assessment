@@ -3,7 +3,7 @@
 return [
     'db' => [
         'host' => 'localhost',
-        'database' => 'DTT_assesment',
+        'database' => 'DTT_assessment',
         'username' => 'root',
         'password' => '',
     ],
