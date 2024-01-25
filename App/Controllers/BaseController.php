@@ -13,7 +13,7 @@ class BaseController extends Injectable {
     /**
      * Template for creating a new row in the database
      */
-    public function create($content){
+    public function create(){
         // Respond with a 501 code as the BaseController should not create any database rows, also the default for any inherited class that has not defined the function.
         (new Status\MethodNotAllowed(['message' => 'This endpoint has not (yet) been created']))->send();
     }
@@ -28,7 +28,7 @@ class BaseController extends Injectable {
         (new Status\MethodNotAllowed(['message' => 'This endpoint has not (yet) been created']))->send();    
     }
 
-    public function update($id, $content){
+    public function update($id){
         // Respond with a 501 code as the BaseController should not create any database rows, also the default for any inherited class that has not defined the function.
         (new Status\MethodNotAllowed(['message' => 'This endpoint has not (yet) been created']))->send();
     }
@@ -38,5 +38,9 @@ class BaseController extends Injectable {
         (new Status\MethodNotAllowed(['message' => 'This endpoint has not (yet) been created']))->send();    
     }
 
+    public function search(){
+        // Respond with a 501 code as the BaseController should not create any database rows, also the default for any inherited class that has not defined the function.
+        (new Status\MethodNotAllowed(['message' => 'This endpoint has not (yet) been created']))->send();    
+    }
 
 }

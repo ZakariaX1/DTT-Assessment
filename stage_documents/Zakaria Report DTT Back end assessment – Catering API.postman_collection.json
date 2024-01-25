@@ -1,0 +1,227 @@
+{
+	"info": {
+		"_postman_id": "1a277935-5c0f-4105-91ac-e469a86abb21",
+		"name": "DTT Back end assessment – Catering API",
+		"description": "The Postman collection for the DTT backend assessment test: Catering API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26632595"
+	},
+	"item": [
+		{
+			"name": "Test API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/test",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"test"
+					]
+				},
+				"description": "API call used to test local development environment and database connection.\n\nShould print _'Hello World!'_ if all is OK."
+			},
+			"response": []
+		},
+		{
+			"name": "Create facility",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "The Company",
+							"type": "text"
+						},
+						{
+							"key": "locationId",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "tags",
+							"value": "Lethal, Moons, Test",
+							"type": "text"
+						},
+						{
+							"key": "creationDate",
+							"value": "2018-03-29 13:34:00",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/facility",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facility"
+					]
+				},
+				"description": "## Create Facility\n\nThis endpoint makes an HTTP POST request to send a query to the database to store a facility.\n\n### Request\n\n- POST body\n- The provided post body will be used to insert a new facility into the database\n- required: name, locationId\n- optional: tags, creationDate\n    \n\n### Response\n\n- **Status: 201**\n- The response will include a message saying the Query was executed\n- **Status: 405**\n- The response will include a message saying that the request didn't go through, likely because of an error in the body.\n- **Status: 500**\n    \n- This status occurs when the database doesn't respond at all."
+			},
+			"response": []
+		},
+		{
+			"name": "Get All",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/facility",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facility"
+					]
+				},
+				"description": "### GET All facilities\n\nThis endpoint makes an HTTP GET request to retrieve information about facilities. The request does not require a request body. If one is provided it will not do anything with it.\n\n### Response\n\n- **Status: 200**\n- The response will include a message and an array of content, with details about each facility including facility name, creation date, tags, city, zip code, country code, and phone number.\n- **Status: 404**\n- The response will include a message saying that the database didn't have any items to get.\n- Status: 500\n- This status occurs when the database doesn't respond at all."
+			},
+			"response": []
+		},
+		{
+			"name": "Get by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/facility/41",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facility",
+						"41"
+					]
+				},
+				"description": "### Get Facility Details\n\nThis endpoint makes an HTTP GET request to retrieve information about a specific facility. The request does not require a request body. If one is provided it will not do anything with it.\n\n### Request\n\n- URL parameter: /facility/{id}\n- Accepts any string, however the id in the database is an INT so if the given string is not an integer it will always respond with a 404\n    \n\n### Response\n\n- **Status: 200**\n- The response will include a message and an array of content, with details about the found facility including facility name, creation date, tags, city, zip code, country code, and phone number.\n- **Status: 404**\n- The response will include a message saying that the database didn't find the facility with the given ID\n- **Status: 500**\n- This status occurs when the database doesn't respond at all."
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Updated Facility #3",
+							"type": "text"
+						},
+						{
+							"key": "locationId",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "tags",
+							"value": "Hello, World, Once More",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/facility/45",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facility",
+						"45"
+					]
+				},
+				"description": "### Update Facility\n\nThis endpoint allows the user to update a facility by making an HTTP POST request to the specified URL with a URL parameter and a body.\n\n### Request\n\n- URL parameter: /facility/{id}\n- Accepts any string, however the id in the database is an INT so if the given string is not an integer it will always respond with a 404\n- POST body\n- The provided post body will be used to insert a new facility into the database\n- required: name, locationId\n- optional: tags\n    \n\n### Response\n\n- **Status: 201**\n- The response will include a message saying the Query was executed\n- **Status: 405**\n- The response will include a message saying that the request didn't go through, likely because of an error in the body.\n- **Status: 500**\n- This status occurs when the database doesn't respond at all."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/facility/2",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facility",
+						"2"
+					]
+				},
+				"description": "This endpoint makes an HTTP DELETE request to delete the facility with the ID of 2. The request does not contain a request body. It can receive one but it will not use it.\n\n### Request\n\n- URL parameter: /facility/{id}\n- Accepts any string, however the id in the database is an INT so if the given string is not an integer it will always respond with a 404\n    \n\n### Response\n\n- **Status: 200**\n    \n- The response will include a message and an array of content, with details about the found facility including facility name, creation date, tags, city, zip code, country code, and phone number.\n    \n- **Status: 404**\n    \n- The response will include a message saying that the database didn't find the facility with the given ID\n    \n- **Status: 500**\n    \n- This status occurs when the database doesn't respond at all."
+			},
+			"response": []
+		},
+		{
+			"name": "Search Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/facility/search?name=Fa&tag=L&city=Amsterd",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facility",
+						"search"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Fa"
+						},
+						{
+							"key": "tag",
+							"value": "L"
+						},
+						{
+							"key": "city",
+							"value": "Amsterd"
+						}
+					]
+				},
+				"description": "This endpoint makes an HTTP GET request to search for facilities based on the provided parameters. The request includes the facility name, tag, and city as query parameters.\n\n### Request\n\n- URL parameter: /facility/search?...\n    \n- name, tag and city\n    \n\n### Response\n\n- **Status: 200**\n- The response will include a message and an array of content, with details about the found facility including facility name, creation date, tags, city, zip code, country code, and phone number. The found facilities will be based on (partial) matches of the parameters and the fields in the database\n    \n- **Status: 404**\n- The response will include a message saying that the database didn't find the facility with the given parameters\n    \n- **Status: 500**\n- This status occurs when the database doesn't respond at all."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost/web_backend_test_catering_api",
+			"type": "string"
+		}
+	]
+}
