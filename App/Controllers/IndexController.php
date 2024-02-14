@@ -36,6 +36,12 @@ class IndexController extends BaseController {
      * @return void
      */
     public function create() {
+        // Check if the required fields are present
+        if (!isset($_POST['name']) || !isset($_POST['locationId']) || !isset($_POST['creationDate'])) {
+            (new Status\BadRequest(['message' => 'Missing required field(s). Required fields: name, locationId and creationDate']))->send();
+            return;
+        }
+
         // Get the data from the POST request and make the query
         $facilityName = $_POST['name'];
         $facilityLocationId = $_POST['locationId'];
