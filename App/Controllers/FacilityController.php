@@ -12,9 +12,6 @@ class FacilityController extends BaseController {
         $this->facilityModel = new FacilityModel();
     }
 
-    // NOTE: I will be using this provided class for the facilities as I don't want to make an unnecessary extra class
-    // and I am not sure if I am allowed to do so.
-    
     /**
      * Controller function used to create a new facility and its tags and associate them with each other.
      * @return void
@@ -102,11 +99,12 @@ class FacilityController extends BaseController {
      * @return void
      */
     public function update($id) {
+        parse_str(file_get_contents('php://input'), $PUT);
         // Get the data from the POST request and make the query
-        $facilityName = $_POST['name'] ?? null;
-        $facilityCreationDate = $_POST['creationDate'] ?? null;
-        $facilityLocationId = $_POST['locationId'] ?? null;
-        $tags = $_POST['tags'] ?? array(); // Create an empty array for the later foreach loop to be able to continue, if no tags are present
+        $facilityName = $PUT['name'] ?? null;
+        $facilityCreationDate = $PUT['creationDate'] ?? null;
+        $facilityLocationId = $PUT['locationId'] ?? null;
+        $tags = $PUT['tags'] ?? array(); // Create an empty array for the later foreach loop to be able to continue, if no tags are present
         if ($tags) $tags = explode(',', $tags);
 
         // Call the update function in the model

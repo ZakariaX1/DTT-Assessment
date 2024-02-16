@@ -3,8 +3,15 @@
 namespace App\Models;
 
 use PDO;
+use App\Models\TagModel;
 
 class FacilityModel extends BaseModel{
+    private $tagsModel;
+
+    public function __construct () {
+        parent::__construct();
+        $this->tagsModel = new TagModel();
+    }
 
     /**
      * Function used to create a new facility in the database
@@ -12,14 +19,13 @@ class FacilityModel extends BaseModel{
      * @return int The ID of the newly created facility
      */
     public function create($params): int | \Exception{
-        var_dump($params);
         $this->db->beginTransaction();
         try {
         $sql = "INSERT INTO facility (name, creation_date, location_id) VALUES (?, ?, ?)";
         $stmt = $this->db->executeQuery($sql, [$params['name'], $params['creation_date'], $params['location_id']]);
 
         $facilityId = $this->db->getLastInsertedId();
-        $this->processTags($params['tags'], $facilityId);
+        $this->tagsModel->processTags($params['tags'], $facilityId);
         
         $this->db->commit();
         return $facilityId;
@@ -29,6 +35,11 @@ class FacilityModel extends BaseModel{
         }
     }
 
+    /**
+     * Function used to get a facility by its ID
+     * @param int $id The ID of the facility to get
+     * @return array The facility with the provided ID
+     */
     public function getById($id){
         $sql = "SELECT f.name facility, f.creation_date facility_creation, GROUP_CONCAT(t.name SEPARATOR ', ') tags, 
         l.city, l.zip_code, l.country_code, l.phone_number FROM facility_has_tag ft 
@@ -47,6 +58,10 @@ class FacilityModel extends BaseModel{
         return $result;
     }
 
+    /**
+     * Function used to get all facilities
+     * @return array All facilities in the database
+     */
     public function getAll(){
         $sql = "SELECT f.id, f.name facility, f.creation_date facility_creation, GROUP_CONCAT(t.name SEPARATOR ', ') tags, 
         l.city, l.zip_code, l.country_code, l.phone_number FROM facility_has_tag ft 
@@ -66,6 +81,12 @@ class FacilityModel extends BaseModel{
         return $result;
     }
 
+    /**
+     * Function used to update a facility
+     * @param int $id The ID of the facility to update
+     * @param array $params The parameters to use when updating the facility, contains: name, creation_date, location_id and array of tags (empty array if no tags are present)
+     * @return int The amount of rows affected by the update
+     */
     public function update($id, $params){
         
         $this->db->beginTransaction();
@@ -80,10 +101,7 @@ class FacilityModel extends BaseModel{
 
             $result = $this->db->getStatement()->rowCount();
 
-            $sql = "DELETE FROM facility_has_tag WHERE facility_id = ?";
-            $this->db->executeQuery($sql, [$id]);
-
-            $this->processTags($params['tags'], $id);
+            $result += $this->tagsModel->processTags($params['tags'], $id);
 
             $this->db->commit();
             return $result;
@@ -93,6 +111,11 @@ class FacilityModel extends BaseModel{
         }
     }
 
+    /**
+     * Function used to delete a facility
+     * @param int $id The ID of the facility to delete
+     * @return int The amount of rows affected by the delete
+     */
     public function delete($id){
         // Prepare the query and execute it
         $sql = "DELETE FROM facility WHERE id = ?";
@@ -104,6 +127,11 @@ class FacilityModel extends BaseModel{
         return $result;
     }
 
+    /**
+     * Function used to search for facilities
+     * @param array $params The parameters to use when searching for facilities, contains: facilityName, tagNames and city
+     * @return array The facilities that match the search parameters
+     */
     public function search($params){
         $sql = "SELECT f.id, f.name facility, f.creation_date facility_creation, GROUP_CONCAT(t.name SEPARATOR ', ') tags, 
         l.city, l.zip_code, l.country_code, l.phone_number FROM facility_has_tag ft 
@@ -132,34 +160,4 @@ class FacilityModel extends BaseModel{
         return $result;
 
     }
-
-
-    // TODO I might want to move this to TagModel for better separation of concerns
-    /**
-     * Function used to process the tags and add them to the database
-     * @param array $tags The tags to process
-     * @param int $facilityId The ID of the facility to associate the tags with
-     * @return void
-     */
-    private function processTags($tags, $facilityId) {
-        if (empty($tags)) {
-            return;
-        }
-        foreach ($tags as $tag) {
-            $tag = trim($tag);
-            $sql = "SELECT id FROM tag WHERE name = ?";
-            $this->db->executeQuery($sql, [$tag]);
-
-            $tagId = $this->db->getStatement()->fetch(PDO::FETCH_ASSOC)['id'] ?? null;
-            if (!$tagId) {
-                $sql = "INSERT INTO tag (name) VALUES (?)";
-                $stmt = $this->db->executeQuery($sql, [$tag]);
-                $tagId = $this->db->getLastInsertId();
-            }
-
-            $sql = "INSERT INTO facility_has_tag (facility_id, tag_id) VALUES (?, ?)";
-            $stmt = $this->db->executeQuery($sql, [$facilityId, $tagId]);
-        }
-    }
-
 }

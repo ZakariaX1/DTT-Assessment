@@ -31,8 +31,8 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
+					"mode": "urlencoded",
+					"urlencoded": [
 						{
 							"key": "name",
 							"value": "The Company",
@@ -50,7 +50,7 @@
 						},
 						{
 							"key": "creationDate",
-							"value": "2018-03-29 13:34:00",
+							"value": "2018-03-29",
 							"type": "text"
 						}
 					]
@@ -107,25 +107,33 @@
 		},
 		{
 			"name": "Update",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
 			"request": {
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
+					"mode": "urlencoded",
+					"urlencoded": [
 						{
 							"key": "name",
-							"value": "Updated Facility #3",
+							"value": "Updated Facility #6",
 							"type": "text"
 						},
 						{
 							"key": "locationId",
-							"value": "2",
+							"value": "1",
 							"type": "text"
 						},
 						{
 							"key": "tags",
 							"value": "Hello, World, Once More",
+							"type": "text"
+						},
+						{
+							"key": "creationDate",
+							"value": "2018-06-29",
 							"type": "text"
 						}
 					]
