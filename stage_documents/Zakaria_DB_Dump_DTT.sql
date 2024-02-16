@@ -29,12 +29,9 @@ CREATE TABLE `employee` (
   `email` varchar(45) NOT NULL,
   `phone_number` varchar(45) NOT NULL,
   `position` varchar(45) NOT NULL,
-  `facility_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
-  UNIQUE KEY `phone_number_UNIQUE` (`phone_number`),
-  KEY `fk_Employee_Facility1_idx` (`facility_id`),
-  CONSTRAINT `fk_Employee_Facility1` FOREIGN KEY (`facility_id`) REFERENCES `facility` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  UNIQUE KEY `phone_number_UNIQUE` (`phone_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -57,12 +54,12 @@ DROP TABLE IF EXISTS `facility`;
 CREATE TABLE `facility` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
-  `creation_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `creation_date` date NOT NULL DEFAULT current_timestamp(),
   `location_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_Facility_Location_idx` (`location_id`),
   CONSTRAINT `fk_Facility_Location` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,8 +68,35 @@ CREATE TABLE `facility` (
 
 LOCK TABLES `facility` WRITE;
 /*!40000 ALTER TABLE `facility` DISABLE KEYS */;
-INSERT INTO `facility` VALUES (1,'test facility','2024-01-24 23:26:35',2),(3,'Updated Facility #2','2024-01-24 23:54:36',1),(29,'another facility','2024-01-25 01:05:46',2),(30,'another facility','2024-01-25 01:06:10',1),(31,'another facility','2024-01-25 01:06:44',1),(32,'another facility','2024-01-25 01:06:54',1),(33,'another facility','2024-01-25 01:07:54',1),(34,'another facility','2024-01-25 01:08:53',3),(35,'another facility','2024-01-25 01:09:31',1),(36,'another facility','2024-01-25 01:10:13',3),(37,'another facility','2024-01-25 01:12:32',1),(38,'another facility','2024-01-25 01:12:56',1),(39,'another facility','2024-01-25 01:13:03',3),(40,'another facility','2024-01-25 01:13:09',2),(41,'Updated Facility','2024-01-25 01:13:16',1),(43,'another facility','2024-01-25 01:14:24',1),(44,'another facility','2024-01-25 01:14:35',1),(45,'Updated Facility #3','2024-01-25 05:19:19',2);
+INSERT INTO `facility` VALUES (72,'The Companys Ship','2018-05-29',2),(73,'The Companys Ship','2018-05-29',2),(74,'The Company\'s Ship','2018-12-29',1),(75,'The Company recruiter','2024-02-16',3),(76,'The Company recruiter','2024-02-16',3),(78,'The Company recruiter','2013-02-23',3);
 /*!40000 ALTER TABLE `facility` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `facility_has_employee`
+--
+
+DROP TABLE IF EXISTS `facility_has_employee`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `facility_has_employee` (
+  `facility_id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  PRIMARY KEY (`facility_id`,`employee_id`),
+  KEY `fk_facility_has_employee_employee1_idx` (`employee_id`),
+  KEY `fk_facility_has_employee_facility1_idx` (`facility_id`),
+  CONSTRAINT `fk_facility_has_employee_employee1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_facility_has_employee_facility1` FOREIGN KEY (`facility_id`) REFERENCES `facility` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `facility_has_employee`
+--
+
+LOCK TABLES `facility_has_employee` WRITE;
+/*!40000 ALTER TABLE `facility_has_employee` DISABLE KEYS */;
+/*!40000 ALTER TABLE `facility_has_employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -99,7 +123,7 @@ CREATE TABLE `facility_has_tag` (
 
 LOCK TABLES `facility_has_tag` WRITE;
 /*!40000 ALTER TABLE `facility_has_tag` DISABLE KEYS */;
-INSERT INTO `facility_has_tag` VALUES (3,5),(3,6),(3,7),(32,1),(32,2),(32,3),(41,5),(41,6),(43,1),(45,5),(45,6),(45,8);
+INSERT INTO `facility_has_tag` VALUES (72,13),(72,14),(72,15),(73,13),(73,14),(73,15),(74,18),(74,19),(74,21),(75,13),(75,17),(76,13),(76,17),(78,13),(78,17);
 /*!40000 ALTER TABLE `facility_has_tag` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,7 +141,7 @@ CREATE TABLE `location` (
   `country_code` varchar(5) NOT NULL,
   `phone_number` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,7 +150,7 @@ CREATE TABLE `location` (
 
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` VALUES (1,'Amsterdam','1088XP','+020','0688904623'),(2,'Amstelveen','1183NX','+31','0644912321'),(3,'Uithoorn','0954KK','+23','0438295423');
+INSERT INTO `location` VALUES (1,'Amsterdam','2238 FC','+31','0612345678'),(2,'Amstelveen','1183 NK','+31','0643562341'),(3,'Utrecht','4409 GF','+31','0677743123');
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,7 +166,7 @@ CREATE TABLE `tag` (
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +175,7 @@ CREATE TABLE `tag` (
 
 LOCK TABLES `tag` WRITE;
 /*!40000 ALTER TABLE `tag` DISABLE KEYS */;
-INSERT INTO `tag` VALUES (7,'Again'),(5,'Hello'),(1,'Lethal'),(2,'Moons'),(8,'Once More'),(3,'Test'),(6,'World');
+INSERT INTO `tag` VALUES (18,'Hello'),(17,'Jobs'),(13,'Lethal'),(14,'Moons'),(21,'Once'),(20,'Once More'),(16,'Sell'),(15,'Space'),(19,'World');
 /*!40000 ALTER TABLE `tag` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -164,4 +188,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-25  6:13:47
+-- Dump completed on 2024-02-16  2:17:45
